@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@recogito/recogito-client-core": "^1.7.7",
+    "@recogito/recogito-js": "^1.8.2"
+  }
+}
