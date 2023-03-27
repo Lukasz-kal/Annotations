@@ -1,10 +1,15 @@
+var path;
+var structon = true;
+var descrpton = true;
+var analiton = true;
+
 var recogito = function() {
     // Intialize Recogito
     var r = Recogito.init({
       content: 'textToAnnotate',
       locale: 'auto',
         widgets: [
-        { widget: 'KOMMENTAR' },
+        { widget: 'COMMENT' },
         { widget: 'TAG', vocabulary: [ 'Strukturelement', 'Desktriptives Element', 'Analitysches Element' ] }
       ],
     });
@@ -59,6 +64,67 @@ var recogito = function() {
           });
         }
     });
+
+    document.getElementById('struc-onoff').addEventListener('click', function() {
+      structon = !structon;
+      
+      r.getAnnotations().forEach(annotation => {
+      if (annotation.body[0].value == "Strukturelement")
+        {
+          var element = document.querySelector(`[data-id="${annotation.id}"]`);
+          if (structon)
+          {
+            document.getElementById('struc-onoff').innerHTML = "Strukturelemente aus";
+            element.classList.replace("transparent", "structure"); 
+          }
+          else
+          {
+            document.getElementById('struc-onoff').innerHTML = "Strukturelemente an";
+            element.classList.replace("structure", "transparent");
+          }
+        }
+      });
+    });
+
+    document.getElementById('desc-onoff').addEventListener('click', function() {
+      descrpton = !descrpton;
+      r.getAnnotations().forEach(annotation => {
+      if (annotation.body[0].value == "Desktriptives Element")
+        {
+          var element = document.querySelector(`[data-id="${annotation.id}"]`);
+          if (descrpton)
+          {
+            document.getElementById('desc-onoff').innerHTML = "Desktriptive Elemente aus";
+            element.classList.replace("transparent", "description"); 
+          }
+          else
+          {
+            document.getElementById('desc-onoff').innerHTML = "Desktriptive Elemente an";
+            element.classList.replace("description", "transparent");
+          }
+        }
+      });
+    });
+
+    document.getElementById('analit-onoff').addEventListener('click', function() {
+      analiton = !analiton;
+      r.getAnnotations().forEach(annotation => {
+      if (annotation.body[0].value == "Analitysches Element")
+        {
+          var element = document.querySelector(`[data-id="${annotation.id}"]`);
+          if (analiton)
+          {
+            document.getElementById('analit-onoff').innerHTML = "Analitysche Elemente aus";
+            element.classList.replace("transparent", "analyze");
+          }
+          else
+          {
+            document.getElementById('analit-onoff').innerHTML =  "Analitysche Elemente an";
+            element.classList.replace("analyze", "transparent");
+          }
+        }
+      });
+    });
   }();
 
   installRenderingPatch = function(recogito) {
@@ -72,7 +138,11 @@ var recogito = function() {
     if (annotation.body[0].value == "Strukturelement")
     {
       var element = document.querySelector(`[data-id="${annotation.id}"]`);
-      element.classList.add("structure");
+      if (structon)
+      {
+        element.classList.add("structure");
+      }
+      else element.classList.add("transparent");
     }
     if (annotation.body[0].value == "Desktriptives Element")
     {
@@ -96,6 +166,7 @@ var recogito = function() {
         var reader = new FileReader();
         reader.readAsText(input.files[0]);
         var path = URL.createObjectURL(input.files[0]);
+        console.log(path);
         var output = document.getElementById('textToAnnotate');
         reader.onload = function() {
             output.innerHTML = reader.result;
