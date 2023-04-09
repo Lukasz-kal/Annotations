@@ -10,6 +10,10 @@
     background-color: rgb(161, 117, 117);
 }
 
+.mixed {
+    background-color: rgb(224, 97, 19);
+}
+
 .transparent {
     background-color: transparent;
 }

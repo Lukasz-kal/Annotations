@@ -2,7 +2,6 @@ var path;
 var structon = true;
 var descrpton = true;
 var analiton = true;
-var sonstigon = true;
 var fileName;
 
 var recogito = function() {
@@ -74,16 +73,7 @@ var recogito = function() {
       if (annotation.body[0].value == "Strukturelement")
         {
           var element = document.querySelector(`[data-id="${annotation.id}"]`);
-          if (structon)
-          {
-            document.getElementById('struc-onoff').innerHTML = "Strukturelemente aus";
-            element.classList.replace("transparent", "structure"); 
-          }
-          else
-          {
-            document.getElementById('struc-onoff').innerHTML = "Strukturelemente an";
-            element.classList.replace("structure", "transparent");
-          }
+          element.classList.replace("transparent", "structure"); 
         }
       });
     });
@@ -94,16 +84,7 @@ var recogito = function() {
       if (annotation.body[0].value == "Desktriptives Element")
         {
           var element = document.querySelector(`[data-id="${annotation.id}"]`);
-          if (descrpton)
-          {
-            document.getElementById('desc-onoff').innerHTML = "Desktriptive Elemente aus";
-            element.classList.replace("transparent", "description"); 
-          }
-          else
-          {
-            document.getElementById('desc-onoff').innerHTML = "Desktriptive Elemente an";
-            element.classList.replace("description", "transparent");
-          }
+          element.classList.replace("transparent", "description"); 
         }
       });
     });
@@ -114,37 +95,7 @@ var recogito = function() {
       if (annotation.body[0].value == "Analitysches Element")
         {
           var element = document.querySelector(`[data-id="${annotation.id}"]`);
-          if (analiton)
-          {
-            document.getElementById('analit-onoff').innerHTML = "Analitysche Elemente aus";
-            element.classList.replace("transparent", "analyze");
-          }
-          else
-          {
-            document.getElementById('analit-onoff').innerHTML =  "Analitysche Elemente an";
-            element.classList.replace("analyze", "transparent");
-          }
-        }
-      });
-    });
-
-    document.getElementById('sonstig-onoff').addEventListener('click', function() {
-      sonstigon = !sonstigon;
-      r.getAnnotations().forEach(annotation => {
-        var value = annotation.body[0].value;
-        if (value != "Analitysches Element" && value != "Desktriptives Element" && value != "Strukturelement")
-        {
-          var element = document.querySelector(`[data-id="${annotation.id}"]`);
-          if (sonstigon)
-          {
-            document.getElementById('sonstig-onoff').innerHTML = "Sonstige Elemente aus";
-            element.classList.replace("transparent", "r6o-annotation");
-          }
-          else
-          {
-            document.getElementById('sonstig-onoff').innerHTML =  "Sonstige Elemente an";
-            element.classList.replace("r6o-annotation", "transparent");
-          }
+          element.classList.toggle("transparent");
         }
       });
     });
@@ -158,21 +109,20 @@ var recogito = function() {
   }
 
   changeBackground = function(annotation) {
-    if (annotation.body[0].value == "Strukturelement")
+    var value = annotation.body[0].value
+    var element = document.querySelector(`[data-id="${annotation.id}"]`);
+    if (value == "Strukturelement")
     {
-      var element = document.querySelector(`[data-id="${annotation.id}"]`);
       if (structon) element.classList.add("structure");
       else element.classList.add("transparent");
     }
-    if (annotation.body[0].value == "Desktriptives Element")
+    else if (value == "Desktriptives Element")
     {
-      var element = document.querySelector(`[data-id="${annotation.id}"]`);
       if(analiton) element.classList.add("description");     
       else element.classList.add("transparent");
     }
-    if (annotation.body[0].value == "Analitysches Element")
+    else if (value == "Analitysches Element")
     {
-      var element = document.querySelector(`[data-id="${annotation.id}"]`);
       if(descrpton) element.classList.add("analyze");
       else element.classList.add("transparent");
     }
