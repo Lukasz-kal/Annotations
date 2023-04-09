@@ -10,10 +10,11 @@
     background-color: rgb(161, 117, 117);
 }
 
-.mixedSD {
-    background-color: red;
-}
-
 .transparent {
     background-color: transparent;
+}
+
+.main-label {
+    text-align: center;
+    font-size: 30px;
 }

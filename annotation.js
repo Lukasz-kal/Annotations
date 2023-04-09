@@ -2,6 +2,8 @@ var path;
 var structon = true;
 var descrpton = true;
 var analiton = true;
+var sonstigon = true;
+var fileName;
 
 var recogito = function() {
     // Intialize Recogito
@@ -42,7 +44,7 @@ var recogito = function() {
       a.href = URL.createObjectURL(new Blob([JSON.stringify(r.getAnnotations(), null, 2)], {
       type: "text/plain"
     }));
-    a.setAttribute("download", "data.txt");
+    a.setAttribute("download", "annotations-"+fileName);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -125,6 +127,27 @@ var recogito = function() {
         }
       });
     });
+
+    document.getElementById('sonstig-onoff').addEventListener('click', function() {
+      sonstigon = !sonstigon;
+      r.getAnnotations().forEach(annotation => {
+        var value = annotation.body[0].value;
+        if (value != "Analitysches Element" && value != "Desktriptives Element" && value != "Strukturelement")
+        {
+          var element = document.querySelector(`[data-id="${annotation.id}"]`);
+          if (sonstigon)
+          {
+            document.getElementById('sonstig-onoff').innerHTML = "Sonstige Elemente aus";
+            element.classList.replace("transparent", "r6o-annotation");
+          }
+          else
+          {
+            document.getElementById('sonstig-onoff').innerHTML =  "Sonstige Elemente an";
+            element.classList.replace("r6o-annotation", "transparent");
+          }
+        }
+      });
+    });
   }();
 
   installRenderingPatch = function(recogito) {
@@ -138,25 +161,24 @@ var recogito = function() {
     if (annotation.body[0].value == "Strukturelement")
     {
       var element = document.querySelector(`[data-id="${annotation.id}"]`);
-      if (structon)
-      {
-        element.classList.add("structure");
-      }
+      if (structon) element.classList.add("structure");
       else element.classList.add("transparent");
     }
     if (annotation.body[0].value == "Desktriptives Element")
     {
       var element = document.querySelector(`[data-id="${annotation.id}"]`);
-      element.classList.add("description");
+      if(analiton) element.classList.add("description");     
+      else element.classList.add("transparent");
     }
     if (annotation.body[0].value == "Analitysches Element")
     {
       var element = document.querySelector(`[data-id="${annotation.id}"]`);
-      element.classList.add("analyze");
+      if(descrpton) element.classList.add("analyze");
+      else element.classList.add("transparent");
     }
   }
 
-  function openFile() {
+  document.getElementById('open-file').addEventListener('click', function() {
     var input = document.createElement('input');
     input.type = 'file';
     input.id = 'inputFile';
@@ -165,15 +187,38 @@ var recogito = function() {
     input.onchange = function() {
         var reader = new FileReader();
         reader.readAsText(input.files[0]);
-        var path = URL.createObjectURL(input.files[0]);
-        console.log(path);
+        fileName = input.files[0].name;
         var output = document.getElementById('textToAnnotate');
         reader.onload = function() {
             output.innerHTML = reader.result;
         }
         console.log(reader.result);
     }    
-  };
+  });
+
+  tippy('#struc-onoff', {
+    content() {
+      const template = document.getElementById('struc');
+      return template.innerHTML;
+    },
+    allowHTML: true,
+  });
+
+  tippy('#desc-onoff', {
+    content() {
+      const template = document.getElementById('desc');
+      return template.innerHTML;
+    },
+    allowHTML: true,
+  });
+
+  tippy('#analit-onoff', {
+    content() {
+      const template = document.getElementById('analit');
+      return template.innerHTML;
+    },
+    allowHTML: true,
+  });
 
 
   
