@@ -1,17 +1,16 @@
 .structure {
   background-color: rgb(136, 178, 230);
+  opacity: 0.75;
 }
 
 .description {
   background-color: rgb(152, 165, 56);
+  opacity: 0.75;
 }
 
 .analyze {
   background-color: rgb(161, 117, 117);
-}
-
-.mixed {
-  background-color: rgb(224, 97, 19) !important;
+  opacity: 0.75;
 }
 
 .transparent {
