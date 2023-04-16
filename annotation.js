@@ -106,26 +106,30 @@ var recogito = function() {
     annotations.forEach(element => {
       changeBackground(element);
     });
-    addOverlappingSpans(annotations);
+    //addOverlappingSpans(annotations);
   }
 
   changeBackground = function(annotation) {
     var value = annotation.body[0].value
-    var element = document.querySelector(`[data-id="${annotation.id}"]`);
-    if (value == "Strukturelement")
+    var elements = document.querySelectorAll(`[data-id="${annotation.id}"]`);
+    for(i=0; i < elements.length; i++)
     {
-      if (structon) element.classList.add("structure");
-      else element.classList.add("transparent");
-    }
-    else if (value == "Desktriptives Element")
-    {
-      if(analiton) element.classList.add("description");     
-      else element.classList.add("transparent");
-    }
-    else if (value == "Analitysches Element")
-    {
-      if(descrpton) element.classList.add("analyze");
-      else element.classList.add("transparent");
+      element = elements[i];
+      if (value == "Strukturelement")
+      {
+        if (structon) element.classList.add("structure");
+        else element.classList.add("transparent");
+      }
+      else if (value == "Desktriptives Element")
+      {
+        if(analiton) element.classList.add("description");     
+        else element.classList.add("transparent");
+      }
+      else if (value == "Analitysches Element")
+      {
+        if(descrpton) element.classList.add("analyze");
+        else element.classList.add("transparent");
+      }
     }
   }
 
