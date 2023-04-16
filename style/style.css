@@ -1,24 +1,24 @@
 .structure {
-    background-color: rgb(136, 178, 230);
+  background-color: rgb(136, 178, 230);
 }
 
 .description {
-    background-color: rgb(152, 165, 56);
+  background-color: rgb(152, 165, 56);
 }
 
 .analyze {
-    background-color: rgb(161, 117, 117);
+  background-color: rgb(161, 117, 117);
 }
 
 .mixed {
-    background-color: rgb(224, 97, 19) !important;
+  background-color: rgb(224, 97, 19) !important;
 }
 
 .transparent {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .main-label {
-    text-align: center;
-    font-size: 30px;
+  text-align: center;
+  font-size: 30px;
 }
