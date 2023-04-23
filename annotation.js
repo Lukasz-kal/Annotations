@@ -8,7 +8,7 @@ var recogito = (function () {
   // Intialize Recogito
   var r = Recogito.init({
     content: "textToAnnotate",
-    locale: "auto",
+    locale: "de",
     widgets: [
       { widget: "COMMENT" },
       {
@@ -38,13 +38,21 @@ var recogito = (function () {
   document
     .getElementById("save-annotation")
     .addEventListener("click", function () {
+      console.log(r.getAnnotations());
+      if (
+        document.getElementById("textToAnnotate").innerText == "" ||
+        r.getAnnotations().length == 0
+      ) {
+        window.alert("Keine Daten vorhanden");
+        return;
+      }
       const a = document.createElement("a");
       a.href = URL.createObjectURL(
         new Blob([JSON.stringify(r.getAnnotations(), null, 2)], {
           type: "text/plain",
         })
       );
-      a.setAttribute("download", "annotations-" + fileName);
+      a.setAttribute("download", "annotations-" + fileName + ".json");
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -54,9 +62,14 @@ var recogito = (function () {
   document
     .getElementById("load-annotation")
     .addEventListener("click", function () {
+      if (document.getElementById("textToAnnotate").innerText == "") {
+        window.alert("Laden Sie bitte zuerst eine Quelldatei hoch");
+        return;
+      }
       var input = document.createElement("input");
       input.type = "file";
       input.id = "inputFile";
+      input.accept = ".json";
       input.click();
       input.onchange = function () {
         var reader = new FileReader();
@@ -167,6 +180,7 @@ tippy("#struc-onoff", {
     return template.innerHTML;
   },
   allowHTML: true,
+  maxWidth: 280,
 });
 
 tippy("#desc-onoff", {
@@ -175,6 +189,7 @@ tippy("#desc-onoff", {
     return template.innerHTML;
   },
   allowHTML: true,
+  maxWidth: 300,
 });
 
 tippy("#analit-onoff", {
