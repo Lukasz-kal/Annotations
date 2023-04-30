@@ -28,6 +28,10 @@ var recogito = (function () {
   });
 
   r.on("createAnnotation", function (a) {
+    if (a.body.length > 1) {
+      window.alert("Bitte wählen Sie nur eine Annotationskategorie");
+      return;
+    }
     console.log("created", a);
     installRenderingPatch(r);
   });
@@ -65,6 +69,8 @@ var recogito = (function () {
       if (document.getElementById("textToAnnotate").innerText == "") {
         window.alert("Laden Sie bitte zuerst eine Quelldatei hoch");
         return;
+      } else {
+        window.alert("Bestehende Annoationen werden entfernt");
       }
       var input = document.createElement("input");
       input.type = "file";
@@ -78,13 +84,22 @@ var recogito = (function () {
         r.loadAnnotations(path).then(function (a) {
           installRenderingPatch(r);
           console.log("loaded", a);
+          resetOnOff();
+          alert("Annotationen geöffnet");
         });
       };
     });
 
   document.getElementById("struc-onoff").addEventListener("click", function () {
     structon = !structon;
-
+    var status = document.getElementById("struc-onoff");
+    var span =
+      "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle structure'>";
+    var text = "Strukturelemente An";
+    if (!structon) {
+      text = "Strukturelemente Aus";
+    }
+    addLabel(status, text, span);
     r.getAnnotations().forEach((annotation) => {
       if (annotation.body[0].value == "Strukturelement") {
         var elements = document.querySelectorAll(
@@ -100,6 +115,14 @@ var recogito = (function () {
 
   document.getElementById("desc-onoff").addEventListener("click", function () {
     descrpton = !descrpton;
+    var status = document.getElementById("desc-onoff");
+    var span =
+      "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle description'>";
+    var text = "Desktriptive Elemente An";
+    if (!descrpton) {
+      text = "Desktriptive Elemente Aus";
+    }
+    addLabel(status, text, span);
     r.getAnnotations().forEach((annotation) => {
       if (annotation.body[0].value == "Desktriptives Element") {
         var elements = document.querySelectorAll(
@@ -117,6 +140,14 @@ var recogito = (function () {
     .getElementById("analit-onoff")
     .addEventListener("click", function () {
       analiton = !analiton;
+      var status = document.getElementById("analit-onoff");
+      var span =
+        "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle analyze'>";
+      var text = "Analitysche Elemente An";
+      if (!analiton) {
+        text = "Analitysche Elemente Aus";
+      }
+      addLabel(status, text, span);
       r.getAnnotations().forEach((annotation) => {
         if (annotation.body[0].value == "Analitysches Element") {
           var elements = document.querySelectorAll(
@@ -171,8 +202,38 @@ document.getElementById("open-file").addEventListener("click", function () {
       output.innerHTML = reader.result;
     };
     console.log(reader.result);
+    resetOnOff();
+    alert("Datei geöffnet");
   };
 });
+
+addLabel = function (element, text, span) {
+  element.innerHTML = text + span;
+};
+
+resetOnOff = function () {
+  structon = true;
+  descrpton = true;
+  analiton = true;
+  var statusStruc = document.getElementById("struc-onoff");
+  var statusDesc = document.getElementById("desc-onoff");
+  var statusAnalit = document.getElementById("analit-onoff");
+  addLabel(
+    statusStruc,
+    "Strukturelemente An",
+    "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle analyze'></span>"
+  );
+  addLabel(
+    statusDesc,
+    "Desktriptive Elemente An",
+    "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle description'></span>"
+  );
+  addLabel(
+    statusAnalit,
+    "Analytische Elemente An",
+    "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle analyze'></span>"
+  );
+};
 
 tippy("#struc-onoff", {
   content() {
