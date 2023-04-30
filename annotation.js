@@ -29,7 +29,8 @@ var recogito = (function () {
 
   r.on("createAnnotation", function (a) {
     if (a.body.length > 1) {
-      window.alert("Bitte wählen Sie nur eine Annotationskategorie");
+      getPopup("Bitte wählen Sie nur eine Annotationskategorie");
+      r.removeAnnotation(a);
       return;
     }
     console.log("created", a);
@@ -47,7 +48,7 @@ var recogito = (function () {
         document.getElementById("textToAnnotate").innerText == "" ||
         r.getAnnotations().length == 0
       ) {
-        window.alert("Keine Daten vorhanden");
+        getPopup("Keine Daten vorhanden");
         return;
       }
       const a = document.createElement("a");
@@ -67,10 +68,10 @@ var recogito = (function () {
     .getElementById("load-annotation")
     .addEventListener("click", function () {
       if (document.getElementById("textToAnnotate").innerText == "") {
-        window.alert("Laden Sie bitte zuerst eine Quelldatei hoch");
+        getPopup("Laden Sie bitte zuerst eine Quelldatei hoch");
         return;
       } else {
-        window.alert("Bestehende Annoationen werden entfernt");
+        getPopup("Bestehende Annoationen werden entfernt");
       }
       var input = document.createElement("input");
       input.type = "file";
@@ -85,7 +86,7 @@ var recogito = (function () {
           installRenderingPatch(r);
           console.log("loaded", a);
           resetOnOff();
-          alert("Annotationen geöffnet");
+          getPopup("Annotationen geöffnet");
         });
       };
     });
@@ -203,7 +204,7 @@ document.getElementById("open-file").addEventListener("click", function () {
     };
     console.log(reader.result);
     resetOnOff();
-    alert("Datei geöffnet");
+    getPopup("Datei geöffnet");
   };
 });
 
@@ -234,6 +235,14 @@ resetOnOff = function () {
     "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle analyze'></span>"
   );
 };
+
+getPopup = function(text)
+{
+  var myInput = document.getElementById('popup');
+  document.getElementById("modal-body").innerHTML = text;
+  var modalEl = new bootstrap.Modal(myInput);
+  modalEl.show();
+}
 
 tippy("#struc-onoff", {
   content() {

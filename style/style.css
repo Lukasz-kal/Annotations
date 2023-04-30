@@ -16,3 +16,8 @@
 .transparent {
   background-color: transparent;
 }
+
+.show {
+  visibility: visible;
+  display: block;
+}
