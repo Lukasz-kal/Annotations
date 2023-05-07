@@ -28,8 +28,17 @@ var recogito = (function () {
   });
 
   r.on("createAnnotation", function (a) {
-    if (a.body.length > 1) {
+    var tagLenght = 0;
+    for (i = 0; i < a.body.length; i++) {
+      if (a.body[i].purpose == "tagging") tagLenght++;
+    }
+    if (tagLenght > 1) {
       getPopup("Bitte wählen Sie nur eine Annotationskategorie");
+      r.removeAnnotation(a);
+      return;
+    }
+    if (tagLenght == 0) {
+      getPopup("Bitte wählen Sie eine Annotationskategorie");
       r.removeAnnotation(a);
       return;
     }
@@ -70,8 +79,6 @@ var recogito = (function () {
       if (document.getElementById("textToAnnotate").innerText == "") {
         getPopup("Laden Sie bitte zuerst eine Quelldatei hoch");
         return;
-      } else {
-        getPopup("Bestehende Annoationen werden entfernt");
       }
       var input = document.createElement("input");
       input.type = "file";
@@ -236,13 +243,12 @@ resetOnOff = function () {
   );
 };
 
-getPopup = function(text)
-{
-  var myInput = document.getElementById('popup');
+getPopup = function (text) {
+  var myInput = document.getElementById("popup");
   document.getElementById("modal-body").innerHTML = text;
   var modalEl = new bootstrap.Modal(myInput);
   modalEl.show();
-}
+};
 
 tippy("#struc-onoff", {
   content() {
