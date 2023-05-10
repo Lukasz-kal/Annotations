@@ -3,6 +3,7 @@ var structon = true;
 var descrpton = true;
 var analiton = true;
 var fileName;
+var comments = [];
 
 var recogito = (function () {
   // Intialize Recogito
@@ -90,9 +91,9 @@ var recogito = (function () {
         reader.readAsText(input.files[0]);
         var path = URL.createObjectURL(input.files[0]);
         r.loadAnnotations(path).then(function (a) {
-          installRenderingPatch(r);
           console.log("loaded", a);
           resetOnOff();
+          installRenderingPatch(r);
           getPopup("Annotationen geöffnet");
         });
       };
@@ -181,9 +182,12 @@ var recogito = (function () {
 
 installRenderingPatch = function (recogito) {
   const annotations = recogito.getAnnotations();
+  comments = [];
   annotations.forEach((element) => {
     changeBackground(element);
+    addCommentsToSection(element);
   });
+  showComments();
 };
 
 changeBackground = function (annotation) {
@@ -209,6 +213,48 @@ changeBackground = function (annotation) {
   }
 };
 
+addCommentsToSection = function (annotation) {
+  for (i = 0; i < annotation.body.length; i++) {
+    if (annotation.body[i].purpose == "commenting") {
+      var comment = new CommentInSection(
+        annotation.id,
+        annotation.body[i].value,
+        annotation.target.selector[0].exact
+      );
+      comments.push(comment);
+    }
+  }
+};
+
+showComments = function () {
+  var targetElement = document.getElementById("comments");
+  var innerHTML = "<h3>Kommentare </h3><hr/>";
+  for (i = 0; i < comments.length; i++) {
+    var id = "comment-" + comments[i].id;
+    innerHTML +=
+      '<div><button type="button" id="' +
+      id +
+      '" class="btn btn-primary btn-sm comments"> <div style = "font-size:10px">' +
+      '"' +
+      comments[i].sourceText.substr(0, 30) +
+      '"</button></div><div>' +
+      comments[i].text +
+      "</div></div><hr/>";
+  }
+  targetElement.innerHTML = innerHTML;
+  document.querySelectorAll(".comments").forEach((item) => {
+    item.addEventListener("click", function () {
+      var targetId = item.id.substr(8);
+      var element = document.querySelector(`[data-id="${targetId}"]`);
+      element.scrollIntoView();
+      element.classList.add("red");
+      sleep(5000).then(() => {
+        element.classList.remove("red");
+      });
+    });
+  });
+};
+
 document.getElementById("open-file").addEventListener("click", function () {
   var input = document.createElement("input");
   input.type = "file";
@@ -225,6 +271,7 @@ document.getElementById("open-file").addEventListener("click", function () {
     };
     console.log(reader.result);
     resetOnOff();
+    comments = [];
     getPopup("Datei geöffnet");
   };
 });
@@ -276,3 +323,15 @@ tippy("#analit-onoff", {
   },
   allowHTML: true,
 });
+
+class CommentInSection {
+  constructor(id, text, sourceText) {
+    this.id = id;
+    this.text = text;
+    this.sourceText = sourceText;
+  }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
