@@ -241,16 +241,20 @@ showComments = function () {
       comments[i].text +
       "</div></div><hr/>";
   }
-  targetElement.innerHTML = innerHTML;
+  if (comments.length > 0) {
+    targetElement.innerHTML = innerHTML;
+  }
   document.querySelectorAll(".comments").forEach((item) => {
     item.addEventListener("click", function () {
       var targetId = item.id.substr(8);
-      var element = document.querySelector(`[data-id="${targetId}"]`);
-      element.scrollIntoView();
-      element.classList.add("red");
-      sleep(5000).then(() => {
-        element.classList.remove("red");
-      });
+      var elements = document.querySelectorAll(`[data-id="${targetId}"]`);
+      for (i = 0; i < elements.length; i++) {
+        element.scrollIntoView();
+        element.classList.add("red");
+        sleep(2500).then(() => {
+          element.classList.remove("red");
+        });
+      }
     });
   });
 };
