@@ -109,7 +109,10 @@ var recogito = (function () {
       status.classList.remove("structure");
     }
     r.getAnnotations().forEach((annotation) => {
-      if (annotation.body[0].value == "Strukturelement") {
+      if (
+        annotation.body[0].value == "Strukturelement" ||
+        annotation.body[1].value == "Strukturelement"
+      ) {
         var elements = document.querySelectorAll(
           `[data-id="${annotation.id}"]`
         );
@@ -132,7 +135,10 @@ var recogito = (function () {
       status.classList.remove("description");
     }
     r.getAnnotations().forEach((annotation) => {
-      if (annotation.body[0].value == "Deskriptives Element") {
+      if (
+        annotation.body[0].value == "Deskriptives Element" ||
+        annotation.body[1].value == "Deskriptives Element"
+      ) {
         var elements = document.querySelectorAll(
           `[data-id="${annotation.id}"]`
         );
@@ -157,7 +163,10 @@ var recogito = (function () {
         status.classList.remove("analyse");
       }
       r.getAnnotations().forEach((annotation) => {
-        if (annotation.body[0].value == "Analytisches Element") {
+        if (
+          annotation.body[0].value == "Analytisches Element" ||
+          annotation.body[1].value == "Analytisches Element"
+        ) {
           var elements = document.querySelectorAll(
             `[data-id="${annotation.id}"]`
           );
@@ -178,7 +187,12 @@ installRenderingPatch = function (recogito) {
 };
 
 changeBackground = function (annotation) {
-  var value = annotation.body[0].value;
+  var value;
+  if (annotation.body[0].purpose == "tagging") {
+    value = annotation.body[0].value;
+  } else {
+    value = annotation.body[1].value;
+  }
   var elements = document.querySelectorAll(`[data-id="${annotation.id}"]`);
   for (i = 0; i < elements.length; i++) {
     element = elements[i];
@@ -207,7 +221,7 @@ document.getElementById("open-file").addEventListener("click", function () {
     fileName = input.files[0].name;
     var output = document.getElementById("textToAnnotate");
     reader.onload = function () {
-      output.innerHTML = reader.result;
+      output.innerText = reader.result;
     };
     console.log(reader.result);
     resetOnOff();

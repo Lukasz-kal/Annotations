@@ -81,18 +81,25 @@
       </tbody>
     </table>
     <br />
-    <div class="container-fluid border-top border-dark">
+    <div class="container-fluid border-top border-bottom border-dark">
       <b>Hinweis Nr. 1:</b> Beim Öffnen einer Textdatei, bzw. einer Datei mit
       Annotationen, werden alle Kategorien wieder als aktiv angezeigt.
       <br />
       <b>Hinweis Nr. 2:</b> Beim Öffnen einer Annotationsdatei werden bestehende
       Annotationen entfernt.
     </div>
-
-    <br />
-    <div class="container-fluid border-top border-dark">
-      <p id="textToAnnotate"></p>
-    </div>
+    <table>
+      <tr>
+        <td style="width: 90%">
+          <div class="container-fluid">
+            <p id="textToAnnotate"></p>
+          </div>
+        </td>
+        <td style="width: 10%">
+          <div class="border-right border-dark"><p id="comments"></p></div>
+        </td>
+      </tr>
+    </table>
 
     <div class="d-none">
       <div id="struc">
