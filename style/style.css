@@ -17,7 +17,6 @@
   background-color: transparent;
 }
 
-.show {
-  visibility: visible;
-  display: block;
+.inactiv {
+  background-color: rgba(211, 211, 211);
 }

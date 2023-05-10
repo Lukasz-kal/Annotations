@@ -15,8 +15,8 @@ var recogito = (function () {
         widget: "TAG",
         vocabulary: [
           "Strukturelement",
-          "Desktriptives Element",
-          "Analitysches Element",
+          "Deskriptives Element",
+          "Analytisches Element",
         ],
       },
     ],
@@ -101,13 +101,13 @@ var recogito = (function () {
   document.getElementById("struc-onoff").addEventListener("click", function () {
     structon = !structon;
     var status = document.getElementById("struc-onoff");
-    var span =
-      "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle structure'>";
-    var text = "Strukturelemente An";
-    if (!structon) {
-      text = "Strukturelemente Aus";
+    if (structon) {
+      status.classList.remove("inactiv");
+      status.classList.add("structure");
+    } else {
+      status.classList.add("inactiv");
+      status.classList.remove("structure");
     }
-    addLabel(status, text, span);
     r.getAnnotations().forEach((annotation) => {
       if (annotation.body[0].value == "Strukturelement") {
         var elements = document.querySelectorAll(
@@ -124,15 +124,15 @@ var recogito = (function () {
   document.getElementById("desc-onoff").addEventListener("click", function () {
     descrpton = !descrpton;
     var status = document.getElementById("desc-onoff");
-    var span =
-      "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle description'>";
-    var text = "Desktriptive Elemente An";
-    if (!descrpton) {
-      text = "Desktriptive Elemente Aus";
+    if (descrpton) {
+      status.classList.remove("inactiv");
+      status.classList.add("description");
+    } else {
+      status.classList.add("inactiv");
+      status.classList.remove("description");
     }
-    addLabel(status, text, span);
     r.getAnnotations().forEach((annotation) => {
-      if (annotation.body[0].value == "Desktriptives Element") {
+      if (annotation.body[0].value == "Deskriptives Element") {
         var elements = document.querySelectorAll(
           `[data-id="${annotation.id}"]`
         );
@@ -149,15 +149,15 @@ var recogito = (function () {
     .addEventListener("click", function () {
       analiton = !analiton;
       var status = document.getElementById("analit-onoff");
-      var span =
-        "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle analyze'>";
-      var text = "Analitysche Elemente An";
-      if (!analiton) {
-        text = "Analitysche Elemente Aus";
+      if (analiton) {
+        status.classList.remove("inactiv");
+        status.classList.add("analyse");
+      } else {
+        status.classList.add("inactiv");
+        status.classList.remove("analyse");
       }
-      addLabel(status, text, span);
       r.getAnnotations().forEach((annotation) => {
-        if (annotation.body[0].value == "Analitysches Element") {
+        if (annotation.body[0].value == "Analytisches Element") {
           var elements = document.querySelectorAll(
             `[data-id="${annotation.id}"]`
           );
@@ -185,10 +185,10 @@ changeBackground = function (annotation) {
     if (value == "Strukturelement") {
       if (structon) element.classList.add("structure");
       else element.classList.add("transparent");
-    } else if (value == "Desktriptives Element") {
+    } else if (value == "Deskriptives Element") {
       if (analiton) element.classList.add("description");
       else element.classList.add("transparent");
-    } else if (value == "Analitysches Element") {
+    } else if (value == "Analytisches Element") {
       if (descrpton) element.classList.add("analyze");
       else element.classList.add("transparent");
     }
@@ -215,32 +215,19 @@ document.getElementById("open-file").addEventListener("click", function () {
   };
 });
 
-addLabel = function (element, text, span) {
-  element.innerHTML = text + span;
-};
-
 resetOnOff = function () {
   structon = true;
   descrpton = true;
   analiton = true;
   var statusStruc = document.getElementById("struc-onoff");
+  statusStruc.classList.remove("inactiv");
+  statusStruc.classList.add("structure");
   var statusDesc = document.getElementById("desc-onoff");
+  statusDesc.classList.remove("inactiv");
+  statusDesc.classList.add("description");
   var statusAnalit = document.getElementById("analit-onoff");
-  addLabel(
-    statusStruc,
-    "Strukturelemente An",
-    "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle analyze'></span>"
-  );
-  addLabel(
-    statusDesc,
-    "Desktriptive Elemente An",
-    "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle description'></span>"
-  );
-  addLabel(
-    statusAnalit,
-    "Analytische Elemente An",
-    "<span class='position-absolute top-100 start-50 translate-middle p-2 border border-light rounded-circle analyze'></span>"
-  );
+  statusAnalit.classList.remove("inactiv");
+  statusAnalit.classList.add("analyse");
 };
 
 getPopup = function (text) {
